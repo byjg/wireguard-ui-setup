@@ -1,12 +1,12 @@
 # Wireguard-ui-setup
 
-This scripts helps to setup the [wireguard-ui](https://github.com/ngoduykhanh/wireguard-ui) project into the your machine. It enables:
+This scripts helps to setup the [wireguard-ui](https://github.com/ngoduykhanh/wireguard-ui) project into your machine. It enables:
 
 - Setup the server interface
 - Setup the clients interfaces
-- Restart wireguard-ui with no interruption
+- Restart the server interface with no interruption
 
-## How to execute
+## Preparing
 
 Open the file `wireguard-ui-setup.sh` and edit the parameteres in the begin of the file:
 
@@ -59,6 +59,14 @@ Usage of /opt/wireguard-ui/wireguard-ui:
   -smtp-username string
     	SMTP Password
 ```
+
+## Executing
+
+```
+sudo ./wireguard-ui-setup.sh
+```
+
+If you don't have a `$WG_INTERFACE` previously setup, create one with the wireguard-ui setup and enable it with `wg-quick up $WG_INTERFACE` to activate the auto-apply.
 
 ## More information
 
