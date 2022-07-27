@@ -1,0 +1,11 @@
+[Unit]
+Description=Restart WireGuard
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=${WG_DIRECTORY}/restart-interface.sh
+
+[Install]
+RequiredBy=wgui-monitor.path
+

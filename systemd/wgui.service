@@ -1,0 +1,11 @@
+[Unit]
+Description=Wireguard UI
+After=network.target
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+WorkingDirectory=${WG_DIRECTORY}
+ExecStart=${WG_DIRECTORY}/wireguard-ui ${WG_ARGS}
+[Install]
+WantedBy=multi-user.target

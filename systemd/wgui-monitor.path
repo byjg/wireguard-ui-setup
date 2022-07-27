@@ -1,0 +1,8 @@
+[Unit]
+Description=Watch /etc/wireguard/${WG_INTERFACE}.conf for changes
+
+[Path]
+PathModified=/etc/wireguard/${WG_INTERFACE}.conf
+
+[Install]
+WantedBy=multi-user.target
