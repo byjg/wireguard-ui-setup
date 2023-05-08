@@ -1,13 +1,14 @@
 #!/bin/bash
 
 set -e
-set -x
 
-CONFIG_FILE=config.dev
+CONFIG_FILE=./config.env
 
 if [ -n "$1" ]; then
     CONFIG_FILE=$1
 fi
+
+ls -la $CONFIG_FILE
 
 if [ ! -f "$CONFIG_FILE" ]; then
     echo "You need a 'config.env' file or provide a path to a valid config"
@@ -17,13 +18,15 @@ fi
 source $CONFIG_FILE
 
 echo "Configuration:"
-echo $WIREGUARD_UI_VERSION
-echo $WIREGUARD_UI_PLATFORM
-echo $WG_INTERFACE
-echo $WG_DIRECTORY
-echo $WG_ARGS
+echo "--------------"
+echo WIREGUARD_UI_VERSION = $WIREGUARD_UI_VERSION
+echo WIREGUARD_UI_PLATFORM = $WIREGUARD_UI_PLATFORM
+echo WG_INTERFACE = $WG_INTERFACE
+echo WG_DIRECTORY = $WG_DIRECTORY
+echo WG_ARGS = $WG_ARGS
+echo "--------------"
 echo
-echo "Press <ENTER> to continue or <CTRL+C> to cancel
+echo "Press <ENTER> to continue or <CTRL+C> to cancel"
 read
 
 apt -y -qq install wireguard-tools resolvconf
