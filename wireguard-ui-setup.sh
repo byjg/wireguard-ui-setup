@@ -3,11 +3,28 @@
 set -e
 set -x
 
-export WIREGUARD_UI_VERSION=0.3.7
-export WIREGUARD_UI_PLATFORM=linux-arm64
-export WG_INTERFACE=wg0
-export WG_DIRECTORY=/opt/wireguard-ui
-export WG_ARGS=''
+CONFIG_FILE=config.dev
+
+if [ -n "$1" ]; then
+    CONFIG_FILE=$1
+fi
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "You need a 'config.env' file or provide a path to a valid config"
+    exit 1
+fi
+
+source $CONFIG_FILE
+
+echo "Configuration:"
+echo $WIREGUARD_UI_VERSION
+echo $WIREGUARD_UI_PLATFORM
+echo $WG_INTERFACE
+echo $WG_DIRECTORY
+echo $WG_ARGS
+echo
+echo "Press <ENTER> to continue or <CTRL+C> to cancel
+read
 
 apt -y -qq install wireguard-tools resolvconf
 

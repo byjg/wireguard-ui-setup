@@ -8,11 +8,11 @@ This scripts helps to setup the [wireguard-ui](https://github.com/ngoduykhanh/wi
 
 ## Preparing
 
-Open the file `wireguard-ui-setup.sh` and edit the parameteres in the begin of the file:
+Open the file `config.env.sample` and edit the parameteres in the file according with your setup and save as `config.env`.
 
 ```
-export WIREGUARD_UI_VERSION=0.3.7
-export WIREGUARD_UI_PLATFORM=linux-arm64
+export WIREGUARD_UI_VERSION=0.4.0
+export WIREGUARD_UI_PLATFORM=linux-amd64
 export WG_INTERFACE=wg0
 export WG_DIRECTORY=/opt/wireguard-ui
 export WG_ARGS=''
