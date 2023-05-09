@@ -25,11 +25,17 @@ echo WIREGUARD_UI_PLATFORM = $WIREGUARD_UI_PLATFORM
 echo WG_INTERFACE = $WG_INTERFACE
 echo WG_DIRECTORY = $WG_DIRECTORY
 echo WG_ARGS = $WG_ARGS
+echo WGUI_SERVER_INTERFACE_ADDRESSES = $WGUI_SERVER_INTERFACE_ADDRESSES
+echo WGUI_DEFAULT_CLIENT_ALLOWED_IPS = $WGUI_DEFAULT_CLIENT_ALLOWED_IPS
+echo WGUI_SERVER_POST_UP_SCRIPT = $WGUI_SERVER_POST_UP_SCRIPT
+echo WGUI_SERVER_POST_DOWN_SCRIPT = $WGUI_SERVER_POST_DOWN_SCRIPT
 echo WGUI_PASSWORD = $WGUI_PASSWORD
 echo "--------------"
 echo
 echo "Press <ENTER> to continue or <CTRL+C> to cancel"
 read
+
+set -x
 
 apt -y -qq install wireguard-tools resolvconf
 
@@ -52,6 +58,8 @@ envsubst < systemd/wgui.service > /etc/systemd/system/wgui.service
 chmod a+x $WG_DIRECTORY/restart-interface.sh
 
 systemctl daemon-reload
+
+set +e
 
 systemctl enable wgui-monitor.{path,service}
 systemctl start wgui-monitor.{path,service}
