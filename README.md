@@ -66,7 +66,8 @@ Usage of /opt/wireguard-ui/wireguard-ui:
 sudo ./wireguard-ui-setup.sh
 ```
 
-If you don't have a `$WG_INTERFACE` previously setup, create one with the wireguard-ui setup and enable it with `wg-quick up $WG_INTERFACE` to activate the auto-apply.
+Once finished, connect to the admin interface, configure the interface and apply. 
+**After apply the new configuration, restart the computer**
 
 ## More information
 
