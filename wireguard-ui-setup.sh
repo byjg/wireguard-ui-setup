@@ -67,10 +67,10 @@ systemctl start wgui-monitor.{path,service}
 systemctl enable wgui.service
 systemctl start wgui.service
 
-echo "[Interface]"                >  /etc/wireguard/$WG_INTERFACE.conf
-echo "Address = 10.252.1.1/24"    >> /etc/wireguard/$WG_INTERFACE.conf
-echo "ListenPort = 51820"         >> /etc/wireguard/$WG_INTERFACE.conf
-echo "Private Key = $(wg genkey)" >> /etc/wireguard/$WG_INTERFACE.conf
+echo "[Interface]"                                    >  /etc/wireguard/$WG_INTERFACE.conf
+echo "Address = ${WGUI_SERVER_INTERFACE_ADDRESSES}"   >> /etc/wireguard/$WG_INTERFACE.conf
+echo "ListenPort = 51820"                             >> /etc/wireguard/$WG_INTERFACE.conf
+echo "Private Key = $(wg genkey)"                     >> /etc/wireguard/$WG_INTERFACE.conf
 
 wg-quick up $WG_INTERFACE || echo 
 systemctl enable wg-quick@$WG_INTERFACE
