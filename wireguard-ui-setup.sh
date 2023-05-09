@@ -33,6 +33,8 @@ apt -y -qq install wireguard-tools resolvconf
 
 sysctl -w net.ipv4.ip_forward=1
 sysctl -w net.ipv6.conf.all.forwarding=1
+echo "net.ipv4.ip_forward = 1"           >  /etc/sysctl.d/99-wireguard.conf
+echo "net.ipv6.conf.all.forwarding = 1"  >> /etc/sysctl.d/99-wireguard.conf 
 
 mkdir -p $WG_DIRECTORY
 
@@ -48,16 +50,17 @@ envsubst < systemd/wgui.service > /etc/systemd/system/wgui.service
 chmod a+x $WG_DIRECTORY/restart-interface.sh
 
 systemctl daemon-reload
+
 systemctl enable wgui-monitor.{path,service}
 systemctl start wgui-monitor.{path,service}
 
 systemctl enable wgui.service
 systemctl start wgui.service
 
-echo "[Interface]"                > /etc/wireguard/$WG_INTERFACE.conf
-echo "Address = 10.252.1.1/24"    > /etc/wireguard/$WG_INTERFACE.conf
-echo "ListenPort = 51820"         > /etc/wireguard/$WG_INTERFACE.conf
-echo "Private Key = $(wg genkey)" > /etc/wireguard/$WG_INTERFACE.conf
+echo "[Interface]"                >  /etc/wireguard/$WG_INTERFACE.conf
+echo "Address = 10.252.1.1/24"    >> /etc/wireguard/$WG_INTERFACE.conf
+echo "ListenPort = 51820"         >> /etc/wireguard/$WG_INTERFACE.conf
+echo "Private Key = $(wg genkey)" >> /etc/wireguard/$WG_INTERFACE.conf
 
 wg-quick up $WG_INTERFACE || echo 
 systemctl enable wg-quick@$WG_INTERFACE
