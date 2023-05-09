@@ -3,6 +3,7 @@ Description=Wireguard UI
 After=network.target
 
 [Service]
+Environment=WGUI_PASSWORD=${WGUI_PASSWORD}
 TimeoutStartSec=0
 Restart=always
 WorkingDirectory=${WG_DIRECTORY}

@@ -15,6 +15,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
     exit 1
 fi
 
+export WGUI_PASSWORD=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c16)
 source $CONFIG_FILE
 
 echo "Configuration:"
@@ -24,6 +25,7 @@ echo WIREGUARD_UI_PLATFORM = $WIREGUARD_UI_PLATFORM
 echo WG_INTERFACE = $WG_INTERFACE
 echo WG_DIRECTORY = $WG_DIRECTORY
 echo WG_ARGS = $WG_ARGS
+echo WGUI_PASSWORD = $WGUI_PASSWORD
 echo "--------------"
 echo
 echo "Press <ENTER> to continue or <CTRL+C> to cancel"
