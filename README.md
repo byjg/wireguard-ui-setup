@@ -8,11 +8,11 @@ This scripts helps to setup the [wireguard-ui](https://github.com/ngoduykhanh/wi
 
 ## Preparing
 
-Open the file `wireguard-ui-setup.sh` and edit the parameteres in the begin of the file:
+Open the file `config.env.sample` and edit the parameteres in the file according with your setup and save as `config.env`.
 
 ```
-export WIREGUARD_UI_VERSION=0.3.7
-export WIREGUARD_UI_PLATFORM=linux-arm64
+export WIREGUARD_UI_VERSION=0.4.0
+export WIREGUARD_UI_PLATFORM=linux-amd64
 export WG_INTERFACE=wg0
 export WG_DIRECTORY=/opt/wireguard-ui
 export WG_ARGS=''
@@ -66,7 +66,8 @@ Usage of /opt/wireguard-ui/wireguard-ui:
 sudo ./wireguard-ui-setup.sh
 ```
 
-If you don't have a `$WG_INTERFACE` previously setup, create one with the wireguard-ui setup and enable it with `wg-quick up $WG_INTERFACE` to activate the auto-apply.
+Once finished, connect to the admin interface, configure the interface and apply. 
+**After apply the new configuration, restart the computer**
 
 ## More information
 

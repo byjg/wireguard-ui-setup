@@ -1,15 +1,48 @@
 #!/bin/bash
 
 set -e
+
+CONFIG_FILE=./config.env
+
+if [ -n "$1" ]; then
+    CONFIG_FILE=$1
+fi
+
+ls -la $CONFIG_FILE
+
+if [ ! -f "$CONFIG_FILE" ]; then
+    echo "You need a 'config.env' file or provide a path to a valid config"
+    exit 1
+fi
+
+export WGUI_PASSWORD=$(< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c16)
+source $CONFIG_FILE
+
+echo "Configuration:"
+echo "--------------"
+echo WIREGUARD_UI_VERSION = $WIREGUARD_UI_VERSION
+echo WIREGUARD_UI_PLATFORM = $WIREGUARD_UI_PLATFORM
+echo WG_INTERFACE = $WG_INTERFACE
+echo WG_DIRECTORY = $WG_DIRECTORY
+echo WG_ARGS = $WG_ARGS
+echo WGUI_SERVER_INTERFACE_ADDRESSES = $WGUI_SERVER_INTERFACE_ADDRESSES
+echo WGUI_DEFAULT_CLIENT_ALLOWED_IPS = $WGUI_DEFAULT_CLIENT_ALLOWED_IPS
+echo WGUI_SERVER_POST_UP_SCRIPT = $WGUI_SERVER_POST_UP_SCRIPT
+echo WGUI_SERVER_POST_DOWN_SCRIPT = $WGUI_SERVER_POST_DOWN_SCRIPT
+echo WGUI_PASSWORD = $WGUI_PASSWORD
+echo "--------------"
+echo
+echo "Press <ENTER> to continue or <CTRL+C> to cancel"
+read
+
 set -x
 
-export WIREGUARD_UI_VERSION=0.3.7
-export WIREGUARD_UI_PLATFORM=linux-arm64
-export WG_INTERFACE=wg0
-export WG_DIRECTORY=/opt/wireguard-ui
-export WG_ARGS=''
-
 apt -y -qq install wireguard-tools resolvconf
+
+sysctl -w net.ipv4.ip_forward=1
+sysctl -w net.ipv6.conf.all.forwarding=1
+echo "net.ipv4.ip_forward = 1"           >  /etc/sysctl.d/99-wireguard.conf
+echo "net.ipv6.conf.all.forwarding = 1"  >> /etc/sysctl.d/99-wireguard.conf 
 
 mkdir -p $WG_DIRECTORY
 
@@ -24,12 +57,22 @@ envsubst < systemd/wgui.service > /etc/systemd/system/wgui.service
 
 chmod a+x $WG_DIRECTORY/restart-interface.sh
 
-wg-quick up $WG_INTERFACE || echo 
-
 systemctl daemon-reload
+
+set +e
+
 systemctl enable wgui-monitor.{path,service}
 systemctl start wgui-monitor.{path,service}
 
 systemctl enable wgui.service
 systemctl start wgui.service
+
+echo "[Interface]"                                    >  /etc/wireguard/$WG_INTERFACE.conf
+echo "Address = ${WGUI_SERVER_INTERFACE_ADDRESSES}"   >> /etc/wireguard/$WG_INTERFACE.conf
+echo "ListenPort = 51820"                             >> /etc/wireguard/$WG_INTERFACE.conf
+echo "Private Key = $(wg genkey)"                     >> /etc/wireguard/$WG_INTERFACE.conf
+
+wg-quick up $WG_INTERFACE || echo 
+systemctl enable wg-quick@$WG_INTERFACE
+
 
